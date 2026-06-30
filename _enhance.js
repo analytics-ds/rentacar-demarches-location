@@ -60,6 +60,18 @@ const CSS = `
 .rcx-toc li{margin:.3rem 0}
 .rcx-toc a{color:#0069b4;text-decoration:none}
 .rcx-toc a:hover{text-decoration:underline}
+.rcx-table-wrap{max-width:1140px;margin:2rem auto 1.5rem;padding:0 1.5rem;font-family:"Source Sans 3","Open Sans",Arial,sans-serif;color:#1c2b3a}
+.rcx-table-wrap h2{font-size:1.25rem;color:#062e5e;font-weight:800;margin:0 0 .8rem}
+.rcx-table{width:100%;border-collapse:collapse;font-size:1rem;border:1px solid #d7e3ee;border-radius:8px;overflow:hidden}
+.rcx-table caption{caption-side:top;text-align:left;font-weight:700;color:#062e5e;padding:0 0 .6rem}
+.rcx-table th,.rcx-table td{padding:.8rem 1rem;text-align:left;vertical-align:top;border-bottom:1px solid #e3e9ef}
+.rcx-table thead th{background:#0069b4;color:#fff;font-weight:700}
+.rcx-table tbody tr:nth-child(even){background:#f4f8fc}
+.rcx-table tbody tr:last-child td{border-bottom:0}
+.rcx-table td:first-child{font-weight:600;white-space:nowrap}
+.rcx-table a{color:#0069b4;text-decoration:none;font-weight:700}
+.rcx-table a:hover{text-decoration:underline}
+@media(max-width:560px){.rcx-table td:first-child{white-space:normal}}
 .rcx-section{max-width:1140px;margin:2.5rem auto;padding:0 1.5rem;font-family:"Source Sans 3","Open Sans",Arial,sans-serif;color:#1c2b3a}
 .rcx-section>h2{color:#062e5e;font-size:1.6rem;font-weight:800;margin:0 0 1.2rem}
 .rcx-faq h3{color:#0069b4;font-size:1.2rem;font-weight:700;margin:1.4rem 0 .4rem}
@@ -102,6 +114,24 @@ const HEAD = `
     <h2>Sommaire</h2>
     <ol>${TOC}</ol>
   </nav>
+</div>`;
+
+// 5b) tableau récapitulatif du contenu (au-dessus de la 1re section)
+const TABLE_ROWS = [
+  ['choisir-vehicule', 'Choisir son véhicule', "Définir ses besoins (citadine, SUV, utilitaire), comparer les offres et réserver tôt pour un meilleur tarif et plus de choix."],
+  ['reserver-en-ligne', 'Réserver en ligne', "Réservation 100 % sur rentacar.fr : ville de départ, type de véhicule, dates, puis confirmation et rappel des documents par mail."],
+  ['documents', 'Documents à fournir', "Pièce d'identité, justificatif de domicile, permis de conduire et carte bancaire au nom du titulaire."],
+  ['depot-garantie', 'Dépôt de garantie', "Versé en agence (carte bancaire ou chèque selon l'agence) : non débité et restitué à la remise du véhicule."],
+];
+const TABLE_HTML = `
+<div class="rcx-table-wrap">
+  <h2>Ce que vous allez apprendre dans ce guide</h2>
+  <table class="rcx-table">
+    <thead><tr><th scope="col">Étape de la location</th><th scope="col">Points clés à retenir</th></tr></thead>
+    <tbody>
+      ${TABLE_ROWS.map(([id, etape, pts]) => `<tr><td><a href="#${id}">${etape}</a></td><td>${pts}</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
 </div>`;
 
 // 6) FAQ + bloc auteur
@@ -172,6 +202,8 @@ ${JSON.stringify({
 // 8) injections
 h = h.replace('</head>', CSS + '\n</head>');
 h = h.replace('<div class="Article_container__bZHBY">', HEAD + '\n<div class="Article_container__bZHBY">');
+h = h.replace('<div class="PointOfInterestList_pointOfInterestList__EHHS9">',
+              TABLE_HTML + '\n<div class="PointOfInterestList_pointOfInterestList__EHHS9">');
 h = h.replace('<div class="Section_sectionContainer___iJiy ReassuranceBlock_reassuranceSectionColor__JBltO">',
               FAQ_HTML + '\n<div class="Section_sectionContainer___iJiy ReassuranceBlock_reassuranceSectionColor__JBltO">');
 h = h.replace('</body>', JSONLD + '\n</body>');
